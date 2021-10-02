@@ -1,34 +1,29 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Cart from "./Cart/Cart";
 import Products from "./Products/Products";
 import './Main.css';
 
-export default class Main extends React.Component {
-    state = { products: [], cart: {} }
+export default function Main() {
+    const [products, setProducts] = useState([]);
+    const [carts, setCarts] = useState([]);
 
-    componentDidMount() {
+    useEffect(() => {
         fetch('./products.JSON')
             .then(res => res.json())
             .then(data => {
-                this.setState({
-                    products: data
-                })
-            });
-    }
-    handleClick = (product) => {
-        const { cart } = this.state;
-        const copyCart = { ...cart }
-        const newCart = { copyCart, product }
-        this.setState(newCart);
-    }
+                setProducts(data);
+            })
+    }, [])
+    const handleClick = (product) => {
 
-    render() {
-        const { products, cart } = this.state;
-        return (
-            <div className="main">
-                <Products products={products} handleButton={this.handleClick}></Products>
-                <Cart cart={cart}></Cart>
-            </div>
-        )
+        const newCart = [...carts, product]
+        setCarts(newCart);
     }
+    return (
+        <div className="main">
+            <Products products={products} handleButton={handleClick}></Products>
+            <Cart carts={carts}></Cart>
+        </div>
+    )
+
 }

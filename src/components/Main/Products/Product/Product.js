@@ -3,7 +3,7 @@ import Button from '../../../Button/Button';
 import Features from './Features/Features';
 import "./Product.css";
 export default function Product({ product, handleButton }) {
-    console.log(product)
+
     const { name, img, seller, price, stock, features } = product;
     return (
         <div className="product">
@@ -11,7 +11,7 @@ export default function Product({ product, handleButton }) {
                 <img src={img} alt="Product image" />
             </div>
             <div className="product-body">
-                <h1 className="product__body-name">{name.slice(0, 50)}</h1>
+                <h1 className="product__body-name">{name}</h1>
                 <p className="product__body-seller">by: {seller}</p>
                 <div className="product__subBody">
                     <div className="product__subBody-price">
