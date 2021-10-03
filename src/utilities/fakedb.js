@@ -1,47 +1,35 @@
-// use local storage as your db for now
-const addToDb = id => {
-  const exists = getDb();
-  let shopping_cart = {};
-  if (!exists) {
-    shopping_cart[id] = 1;
-  }
-  else {
-    shopping_cart = JSON.parse(exists);
-    if (shopping_cart[id]) {
-      const newCount = shopping_cart[id] + 1;
-      shopping_cart[id] = newCount;
+const getDb = () => localStorage.getItem('shopping-cart') ? JSON.parse(localStorage.getItem('shopping-cart')) : {};
+
+const updateDb = (db) => localStorage.setItem('shopping-cart', JSON.stringify(db));
+
+const removeTheCart = () => localStorage.removeItem('shopping-cart');
+
+const addToCart = (key) => {
+  let db = getDb();
+  if (db) {
+    if (key in db) {
+      db[key] = db[key] + 1;
+    } else {
+      db[key] = 1;
     }
-    else {
-      shopping_cart[id] = 1;
-    }
+  } else {
+    db = {};
+    db[key] = 1;
   }
-  updateDb(shopping_cart);
+  updateDb(db);
 }
-
-const getDb = () => localStorage.getItem('shopping_cart');
-const updateDb = cart => {
-  localStorage.setItem('shopping_cart', JSON.stringify(cart));
-}
-
-const removeFromDb = id => {
-  const exists = getDb();
-  if (!exists) {
-
+const deleteSingleProduct = (key) => {
+  let db = getDb();
+  if (key in db) {
+    delete db[key];
+  } else {
+    console.error('there is no key in database named ' + key)
   }
-  else {
-    const shopping_cart = JSON.parse(exists);
-    delete shopping_cart[id];
-    updateDb(shopping_cart);
-  }
+  updateDb(db);
 }
 
-const getStoredCart = () => {
-  const exists = getDb();
-  return exists ? JSON.parse(exists) : {};
+const getTheStoredCart = () => {
+  let db = getDb();
+  return Object.keys(db);
 }
-
-const clearTheCart = () => {
-  localStorage.removeItem('shopping_cart');
-}
-
-export { addToDb, removeFromDb as deleteFromDb, clearTheCart, getStoredCart }
+export { addToCart as add, deleteSingleProduct as remove, removeTheCart as emptyCart, getTheStoredCart as storedCarts };

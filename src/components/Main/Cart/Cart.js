@@ -3,7 +3,7 @@ import Button from '../../Button/Button';
 import "./Cart.css";
 
 export default function Cart({ carts }) {
-    console.log(carts);
+
     let price, shipping, totalBeforeTax, tax, total;
     price = carts.reduce((prevPrice, cart) => prevPrice + cart.price, 0);
     shipping = carts.reduce((prevShipping, cart) => prevShipping + cart.shipping, 0);
